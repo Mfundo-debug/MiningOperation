@@ -1,0 +1,142 @@
+---
+title: "Quality Prediction in a Mining Process"
+author: "Mfundo Monchwe"
+format: html
+editor: visual
+---
+
+## Mining Process and Flotation Plant Database Dataset
+
+::: callout-note
+## Overview of the dataset
+
+The main goal is to use this data to predict how much impurity is in the ore concentrate. As this impurity is measured every hour, if we can predict how much silica (impurity) is in the ore concentrate, we can help the engineers, giving them early information to take actions (empowering)!
+
+Hence, they will be able to take corrective actions in advance (reduce impurity, if it is the case) and also help the environment (reducing the amount of ore that goes to tailings as you reduce silica in the ore concentrate).
+:::
+
+::: callout-note
+The first column shows time and date range (from march of 2017 until september of 2017). Some columns were sampled every 20 second. Others were sampled on a hourly base.
+
+The second and third columns are quality measures of the iron ore pulp right before it is fed into the flotation plant. Column 4 until column 8 are the most important variables that impact in the ore quality in the end of the process. From column 9 until column 22, we can see process data (level and air flow inside the flotation columns, which also impact in ore quality. The last two columns are the final iron ore pulp quality measurement from the lab.\
+Target is to predict the last column, which is the % of silica in the iron ore concentrate.
+:::
+
+::: callout-caution
+## Info about the dataset
+
+• **Date**: Measurement date. (2017-03-10 1:00:00 to 2017-09-09 23:00:00) (DateTime64ns)
+
+• **% Iron Feed**: Percentage of iron in the slurry being fed to the flotation cells (0-100%). (Min 42.74%, max 65.78%) (Float64)
+
+• **% Silica Feed**: Percentage of silica in the slurry being fed to the flotation cells. (0-100%). (Min 1.31%, max 33.4%) (Float64)
+
+• **Starch Flow**: Flow rate of starch (reactive) measured in m3/h. (min 0.002026 m3/h, max 6300.23 m3/h) (Float64)
+
+• **Amine Flow**: Flow rate of amine (reactive) measured in m3/h. (min 241.669 m3/h, max 739.538 m3/h) (Float64)
+
+• **Ore Pulp Flow**: Feed flow rate of pulp measured in t/h. (min 376.249 t/h, max 418.641 m3/h) (Float64)
+
+• **Ore Pulp pH**: pH of the pulp, scale from 0 to 14. (min 8.7533 ph, max 10.808ph) (Float64)
+
+• **Ore Pulp Density**: Density of the pulp measured in kg/cm³. (min 1.519 kg/cm3, max 1.853 kg/cm3) (Float64)
+
+• **Flotation Column Air Flow (1)**: Air flow rate entering flotation cell 1, measured in Nm³/h. (min 175.510 Nm3/h, max 373.871 Nm3/h) (Float64)
+
+• **Flotation Column Air Flow (2)**: Air flow rate entering flotation cell 2, measured in Nm³/h. (min 175.156 Nm3/h, max 375.992 Nm3/h) (Float64)
+
+• **Flotation Column Air Flow (3)**: Air flow rate entering flotation cell 3, measured in Nm³/h. (min 176.469 Nm3/h, max 364.346 Nm3/h) (Float64)
+
+• **Flotation Column Air Flow (4)**: Air flow rate entering flotation cell 4, measured in Nm³/h. (min 292.195 Nm3/h, max 305.871 Nm3/h) (Float64)
+
+• **Flotation Column Air Flow (5)**: Air flow rate entering flotation cell 5, measured in Nm³/h. (min 286.295 Nm3/h, max 310.27 Nm3/h) (Float64)
+
+• **Flotation Column Air Flow (6)**: Air flow rate entering flotation cell 6, measured in Nm³/h. (min 189.928 Nm3/h, max 370.91 Nm3/h) (Float64)
+
+• **Flotation Column Air Flow (7)**: Air flow rate entering flotation cell 7, measured in Nm³/h. (min 185.962 Nm3/h, max 371.593 Nm3/h) (Float64)
+
+• **Flotation Column Level (1)**: Height of the bubble layer at the top of flotation cell 1, measured in mm. (min 149.2 mm, max 862.2 mm) (Float64)
+
+• **Flotation Column Level (2)**: Height of the bubble layer at the top of flotation cell 2, measured in mm. (min 210.7 mm, max 828.9 mm) (Float64)
+
+• **Flotation Column Level (3)**: Height of the bubble layer at the top of flotation cell 3, measured in mm. (min 126.2 mm, max 886.8 mm) (Float64)
+
+• **Flotation Column Level (4)**: Height of the bubble layer at the top of flotation cell 4, measured in mm. (min 162.2 mm, max 680.3 mm) (Float64)
+
+• **Flotation Column Level (5)**: Height of the bubble layer at the top of flotation cell 5, measured in mm. (min 166.9 mm, max 675.6 mm) (Float64)
+
+• **Flotation Column Level (6)**: Height of the bubble layer at the top of flotation cell 6, measured in mm. (min 155.8 mm, max 698.8 mm) (Float64)
+
+• **Flotation Column Level (7)**: Height of the bubble layer at the top of flotation cell 7, measured in mm. (min 175.3 mm, max 659.9 mm) (Float64)
+
+## target variables
+
+-   **% Iron Concentrate:** Percentage of iron in the concentrate at the end of the flotation process (%), obtained through subsequent laboratory analysis. (min 62.05%, max 68.01%) (Float64)
+
+-   **% Silica Concentrate:** Percentage of silica in the concentrate at the end of the flotation process (%), obtained through subsequent laboratory analysis. (min 0.6%, max 5.63%) (Float64)
+:::
+
+::: callout-tip
+## Summary
+
+This dataset is about a flotation plant which is a process used to concentrate the iron ore. This process is very common in a mining plant.
+:::
+
+::: callout-important
+## Goal of this dataset
+
+The target is to predict the % of Silica in the end of the process, which is the concentrate of iron ore and its impurity (which is the % of Silica).
+:::
+
+```{python}
+#| code-fold: true
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+```
+
+```{python}
+#| code-fold: true
+data = pd.read_csv("C:/Users/didit/Downloads/MiningOper/mineplant.csv")
+data.head()
+data.describe()
+```
+
+::: callout-note
+## Summary of dataset statistics
+
+Count: 737453
+
+mean: 56.29
+
+min: 42.75
+
+max 65.78
+:::
+
+##### Check if there are any anomialies in collecting samples form 01/06/2017?
+
+```{python}
+#| code-fold: true
+max_date = data['date'].max()
+print('The maximum date is'+ str(max_date))
+min_date = data['date'].min()
+print('the minimum date is'+ str(min_date))
+```
+
+the output above indicates the starting time till the final time, this will help us understand the trend and patterns in the data over time.
+
+the next step is to select important features we want to focus on .
+
+```{python}
+#| code-fold: true
+important_cols =["date", "% Iron Concentrate","% Silica Concentrate","Ore Pulp pH","Flotation Column 05 Level"]
+
+data_june = data[important_cols]
+data_june.head()
+```
+
+```{python}
+sns.lineplot(x='date', y='% Iron Concentrate', data=data_june)
+```
